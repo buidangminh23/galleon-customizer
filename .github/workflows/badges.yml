@@ -1,0 +1,49 @@
+name: README badges
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  push:
+    branches: [main]
+    paths: ['app/CMakeLists.txt', 'scripts/render-badges.mjs', '.github/workflows/badges.yml']
+  workflow_dispatch:
+
+concurrency:
+  group: readme-badges
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Check out the analytics branch (keeps the last values)
+        run: |
+          if git ls-remote --exit-code --heads origin analytics >/dev/null; then
+            git fetch --depth 1 origin analytics
+            git worktree add badges origin/analytics
+          else
+            git worktree add --detach badges
+            git -C badges checkout --orphan analytics
+            git -C badges rm -rfq .
+          fi
+      - name: Render badges
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ANALYTICS_TOKEN: ${{ secrets.ANALYTICS_TOKEN }}
+        run: node scripts/render-badges.mjs badges
+      - name: Publish to the analytics branch
+        working-directory: badges
+        run: |
+          git add -A
+          if git diff --cached --quiet; then echo "No change."; exit 0; fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -qm 'chore: refresh README badges'
+          git push origin HEAD:analytics

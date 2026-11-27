@@ -4,6 +4,17 @@
 
 <h1>Galleon Customizer</h1>
 
+<p>
+  <a href="app/CMakeLists.txt"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-version.svg" height="20" alt="version" /></a>
+  <a href="https://github.com/buidangminh23/galleon-customizer/stargazers"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-stars.svg" height="20" alt="stars" /></a>
+  <a href="https://github.com/buidangminh23/galleon-customizer/commits/main"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-last-commit.svg" height="20" alt="last commit" /></a>
+  <br />
+  <a href="https://github.com/buidangminh23/galleon-customizer/graphs/traffic"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-github-views.svg" height="20" alt="GitHub views / 14 days" /></a>
+  <a href="https://github.com/buidangminh23/galleon-customizer/graphs/traffic"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-github-clones.svg" height="20" alt="GitHub clones / 14 days" /></a>
+  <a href="#install-on-linux"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-platform.svg" height="20" alt="platform" /></a>
+  <a href="LICENSE"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-license.svg" height="20" alt="license" /></a>
+</p>
+
 <p>Built for</p>
 
 <img src="docs/logo.webp" width="720" alt="Corsair Galleon 100 SD">
