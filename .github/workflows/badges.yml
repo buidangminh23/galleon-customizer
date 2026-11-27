@@ -5,8 +5,11 @@ on:
     - cron: '17 * * * *'
   push:
     branches: [main]
-    paths: ['app/CMakeLists.txt', 'scripts/render-badges.mjs', '.github/workflows/badges.yml']
+    paths: ['package.json', 'scripts/render-badges.mjs', '.github/workflows/badges.yml']
   workflow_dispatch:
+  workflow_run:
+    workflows: [Publish]
+    types: [completed]
 
 concurrency:
   group: readme-badges

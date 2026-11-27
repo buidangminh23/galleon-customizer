@@ -1,0 +1,51 @@
+name: Publish
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  # Trusted publishing: npm checks this workflow's OIDC identity, no token stored.
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # Trusted publishing needs npm 11.5.1 or newer, which Node 24 ships.
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+
+      - run: npm test
+
+      - name: Fail early when the tag and package.json disagree
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          pkg="$(node -p "require('./package.json').version")"
+          if [ "${GITHUB_REF_TYPE}" = "tag" ] && [ "$tag" != "$pkg" ]; then
+            echo "tag $GITHUB_REF_NAME does not match package.json $pkg"
+            exit 1
+          fi
+
+      # The first version is published by hand (npm only accepts a trusted
+      # publisher for a package that exists), so skip a version already there.
+      - name: Check whether this version is already on npm
+        id: published
+        run: |
+          pkg="$(node -p "require('./package.json').name")"
+          ver="$(node -p "require('./package.json').version")"
+          if npm view "$pkg@$ver" version > /dev/null 2>&1; then
+            echo "already=true" >> "$GITHUB_OUTPUT"
+            echo "$pkg@$ver is already on npm - nothing to publish"
+          else
+            echo "already=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - run: npm publish
+        if: steps.published.outputs.already == 'false'

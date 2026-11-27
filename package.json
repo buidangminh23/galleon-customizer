@@ -1,0 +1,54 @@
+{
+  "name": "@minhspark/galleon-customizer",
+  "version": "0.3.0",
+  "description": "Customise every key, dial and the LCD strip of the Corsair Galleon 100 SD on Linux (GNOME). Installs the app with one npx command.",
+  "keywords": [
+    "corsair",
+    "galleon",
+    "galleon-100-sd",
+    "stream-deck",
+    "keyboard",
+    "linux",
+    "gnome",
+    "qt6"
+  ],
+  "license": "GPL-3.0-or-later",
+  "author": "Bui Dang Minh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/buidangminh23/galleon-customizer.git"
+  },
+  "homepage": "https://github.com/buidangminh23/galleon-customizer#readme",
+  "bugs": {
+    "url": "https://github.com/buidangminh23/galleon-customizer/issues"
+  },
+  "type": "module",
+  "bin": {
+    "galleon-customizer-install": "npm/install.mjs"
+  },
+  "files": [
+    "npm",
+    "install.sh",
+    "save.sh",
+    "app",
+    "applications",
+    "autostart",
+    "bin",
+    "config",
+    "systemd",
+    "udev",
+    "LICENSE"
+  ],
+  "os": [
+    "linux"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "node npm/check-version.mjs"
+  }
+}

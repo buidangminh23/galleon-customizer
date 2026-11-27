@@ -5,10 +5,12 @@
 <h1>Galleon Customizer</h1>
 
 <p>
-  <a href="app/CMakeLists.txt"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-version.svg" height="20" alt="version" /></a>
+  <a href="https://www.npmjs.com/package/@minhspark/galleon-customizer"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-npm-version.svg" height="20" alt="npm" /></a>
+  <a href="https://www.npmjs.com/package/@minhspark/galleon-customizer"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-npm-downloads.svg" height="20" alt="npm downloads" /></a>
+  <a href="https://www.npmcharts.com/compare/%40minhspark%2Fgalleon-customizer?minimal=true"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-npm-downloads-month.svg" height="20" alt="npm downloads / 30 days" /></a>
+  <br />
   <a href="https://github.com/buidangminh23/galleon-customizer/stargazers"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-stars.svg" height="20" alt="stars" /></a>
   <a href="https://github.com/buidangminh23/galleon-customizer/commits/main"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-last-commit.svg" height="20" alt="last commit" /></a>
-  <br />
   <a href="https://github.com/buidangminh23/galleon-customizer/graphs/traffic"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-github-views.svg" height="20" alt="GitHub views / 14 days" /></a>
   <a href="https://github.com/buidangminh23/galleon-customizer/graphs/traffic"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-github-clones.svg" height="20" alt="GitHub clones / 14 days" /></a>
   <a href="#install-on-linux"><img src="https://raw.githubusercontent.com/buidangminh23/galleon-customizer/analytics/stats-platform.svg" height="20" alt="platform" /></a>
@@ -23,7 +25,23 @@
 
 ## Install on Linux
 
-Tested on Ubuntu 26.04 (GNOME, Wayland). On Debian or Ubuntu:
+Tested on Ubuntu 26.04 (GNOME, Wayland).
+
+### Package — npm
+
+Requires **Node.js 18+**. On Debian or Ubuntu one command installs the build dependencies
+(apt), builds and installs the app and the udev rule (asks for sudo), then the settings.
+Use the same command for a fresh install or an update.
+
+```bash
+npx -y @minhspark/galleon-customizer@latest
+```
+
+`--no-deps` skips the apt step, `--settings-only` installs only the settings, `--help` lists the options.
+
+### From source
+
+On Debian or Ubuntu:
 
 ```bash
 sudo apt update

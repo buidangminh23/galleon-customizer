@@ -4,7 +4,7 @@
 // Env: GITHUB_REPOSITORY (owner/name), GH_TOKEN (repo data),
 //      ANALYTICS_TOKEN (optional, push access: traffic views and clones).
 // A badge whose source fails is not written, so the copy already in <out-dir> stays.
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const repo = process.env.GITHUB_REPOSITORY || 'buidangminh23/galleon-customizer';
@@ -30,13 +30,6 @@ async function github(endpoint, token) {
   return response.json();
 }
 
-function appVersion() {
-  const cmake = readFileSync(new URL('../app/CMakeLists.txt', import.meta.url), 'utf8');
-  const match = cmake.match(/project\([^)]*VERSION\s+([0-9.]+)/);
-  if (!match) throw new Error('No VERSION in app/CMakeLists.txt');
-  return match[1];
-}
-
 function traffic(kind, token) {
   // A missing token gives a grey "Unavailable" badge, as on codex-mcp-bridge.
   if (!token) return { label: `GitHub ${kind} / 14d`, message: 'Unavailable', color: '#555', detail: 'Needs the ANALYTICS_TOKEN secret (push access) to read GitHub traffic.' };
@@ -48,8 +41,32 @@ function traffic(kind, token) {
   });
 }
 
+const npmName = '@minhspark/galleon-customizer';
+
+async function npmJson(url) {
+  const response = await fetch(url, { headers: { 'user-agent': 'galleon-customizer-badges' } });
+  if (response.status === 404) return null; // not published yet: grey "Unavailable"
+  if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
+  return response.json();
+}
+
+const unpublished = label => ({ label, message: 'Unavailable', color: '#555', detail: `${npmName} is not on npm yet.` });
+
+async function npmDownloads(range, label) {
+  const today = new Date().toISOString().slice(0, 10);
+  const data = await npmJson(`https://api.npmjs.org/downloads/point/${range === 'all' ? `2015-01-10:${today}` : range}/${npmName}`);
+  if (!data) return unpublished(label);
+  return { label, message: format(data.downloads), color: '#CB3837', detail: `${data.start} to ${data.end} UTC, npm downloads API. Last successful check: ${checked}. Refreshed hourly.` };
+}
+
 const sources = {
-  'stats-version.svg': async () => ({ label: 'version', message: `v${appVersion()}`, color: '#1f7a3a', detail: `Version in app/CMakeLists.txt. Last successful check: ${checked}.` }),
+  'stats-npm-version.svg': async () => {
+    const data = await npmJson(`https://registry.npmjs.org/${npmName.replace('/', '%2f')}/latest`);
+    if (!data) return unpublished('npm');
+    return { label: 'npm', message: `v${data.version}`, color: '#CB3837', detail: `npm registry latest dist-tag. Last successful check: ${checked}. Refreshed hourly.` };
+  },
+  'stats-npm-downloads.svg': () => npmDownloads('all', 'npm downloads'),
+  'stats-npm-downloads-month.svg': () => npmDownloads('last-month', 'npm downloads / 30d'),
   'stats-stars.svg': async () => {
     const data = await github(`repos/${repo}`, process.env.GH_TOKEN);
     return { label: 'stars', message: format(data.stargazers_count), color: '#0969da', detail: `GitHub stargazers. Last successful check: ${checked}. Refreshed hourly.` };
